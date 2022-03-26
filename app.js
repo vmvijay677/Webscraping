@@ -3,12 +3,14 @@ import cheerio from "cheerio";
 import express from "express";
 import { MongoClient } from "mongodb";
 import dotenv from "dotenv";
+import cors from "cors";
 
 dotenv.config();
 
 const port = process.env.PORT;
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.get("/", (req, res) => {
     res.status(200).send('<h1>Hello world</h1>')
@@ -38,7 +40,7 @@ app.get("/flipkart", async (req, res) => {
         const exchange = $('div._3xFhiH').get().map(val => $(val).text());
         info.push(
             {
-                name: name[0], 
+                name: name, 
                 price: price, 
                 rating: rating,
                 spec1: spec1,
@@ -56,127 +58,6 @@ app.get("/flipkart", async (req, res) => {
     }
 })
 
-
-
-
-
-
-
 app.listen(port, () => {
     console.log(`Server started in ${port}`);
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// // const MONGO_URL = process.env.MONGO_URL;
-// const MONGO_URL = "mongodb+srv://vigneshr:Welcome123@cluster0.cda5v.mongodb.net";
-
-// async function createConnection() {
-//     const client = new MongoClient(MONGO_URL);
-//     await client.connect();
-//     console.log("Mongo is connected 👍");
-//     return client;
-// }
-// const client = await createConnection();
-
-// const URL = "https://www.flipkart.com/search?q=samsung&otracker=search&otracker1=search&marketplace=FLIPKART&as-show=on&as=off";
-// // const URL = "https://www.amazon.in/s?k=iphone&crid=3BI2XXEYMCN96&sprefix=iphone%2Caps%2C346&ref=nb_sb_noss_2";
-
-// let info = [];
-
-// axios.get(URL)
-//     .then(res => {
-//         const $ = cheerio.load(res.data);
-//         $('div._2kHMtA').each((i, element) => {
-//             const title = $(element)
-//                 .find('div._4rR01T')
-//                 .text()
-//                 .replace(/\s\s+/g, '');
-
-//             const image = $(element)
-//                 .find('div.CXW8mj').attr('src');
-
-//             const rating = $(element)
-//                 .find('span._2_R_DZ').text();
-            
-//             const spec1 = $(element)
-//                 .find('ul._1xgFaf').text();
-
-//             const price = $(element)
-//                 .find('div._30jeq3 _1_WHN1').text();
-            
-//             const off = $(element)
-//                 .find('div._3Ay6Sb').text();
-
-//             const exchange = $(element)
-//                 .find('div._3xFhiH').text();
-
-//             info.push({
-//                 "title": title,
-//                 "image": image,
-//                 "rating": rating,
-//                 "spec1": spec1,
-//                 "price": price,
-//                 "off": off,
-//                 "exchange": exchange
-//             })
-//             console.log(info);
-//         });
-//     }).catch(err => console.log(err));
-
-//     // app.get("/flipkart", async function (request, response) {
-//     //     //db.flipkart.find({})
-//     //     const flipkart = await client
-//     //         .db("b30wd")
-//     //         .collection("flipkart")
-//     //         .find({})
-//     //         .toArray();
-//     //     response.send(flipkart);
-//     // });
-
-//     app.post("/flipkart", async function (request, response) {
-//         //db.flipkart.insertMany(data)
-//         const data = request.body;
-//         //console.log(data);
-//         const result = await client
-//             .db("b30wd")
-//             .collection("flipkart")
-//             .insertMany(info);
-//         response.send(result);
-//     });
-
-// // axios.get(URL)
-// //     .then((response) => {
-// //         const $ = cheerio.load(response.data);
-
-// //         let title = $("._4rR01T").text();
-// //         let price = $("._30jeq3 _1_WHN1").text();
-// //         let image = $("img._396cs4 _3exPp9").attr('src');
-// //         // const collection = [
-// //         //     {
-// //         //         title: title,
-// //         //         price: price
-// //         //     }
-// //         // ]
-// //         data.push(title);
-// //         console.log(data);
-// //         app.get("/", function (request, response) {
-// //             response.send(`${title}`);
-// //         })
-// //     }).catch(err => console.log(err));
